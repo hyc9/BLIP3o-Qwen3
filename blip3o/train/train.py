@@ -259,13 +259,13 @@ def smart_tokenizer_and_embedding_resize(
 ):
 
 
-    num_new_tokens = tokenizer.add_special_tokens(special_tokens_dict)
-    model.resize_token_embeddings(len(tokenizer))
+    num_new_tokens = tokenizer.add_special_tokens(special_tokens_dict) #{'additional_special_tokens': ['[IMG]', '[/IMG]', '<image>']}
+    model.resize_token_embeddings(len(tokenizer)) #151672
 
-    if num_new_tokens > 0:
+    if num_new_tokens > 0: #3
         input_embeddings = model.get_input_embeddings().weight.data
         input_embeddings_avg = input_embeddings[:-num_new_tokens].mean(dim=0, keepdim=True)
-        input_embeddings[-num_new_tokens:] = input_embeddings_avg
+        input_embeddings[-num_new_tokens:] = input_embeddings_avg    # 3 1024
 
 
 def _tokenize_fn(strings: Sequence[str], tokenizer: transformers.PreTrainedTokenizer) -> Dict:
@@ -496,9 +496,10 @@ class LazySupervisedMixDataset(Dataset):
 
 
         ###################################### text to image ####################################### 
-        data_files = glob.glob(os.path.join(self.data_args.image_folder, "*.tar"))
+        #data_files = glob.glob(os.path.join(self.data_args.image_folder, "*.tar"))
+        data_files = [glob.glob(os.path.join(self.data_args.image_folder, "*.tar"))[0]]
         ## text to image
-        train_dataset = load_dataset("webdataset", data_files=data_files, split="train", cache_dir='/fsx/sfr/data/jiuhai/', num_proc=128)
+        train_dataset = load_dataset("webdataset", data_files=data_files, split="train", num_proc=128)#
         train_dataset = train_dataset.rename_column("jpg", "image")
         train_dataset = train_dataset.add_column('type', len(train_dataset) * ['T2I'])
         train_dataset = train_dataset.add_column('image_path', len(train_dataset) * [None])
@@ -510,16 +511,17 @@ class LazySupervisedMixDataset(Dataset):
 
 
         ###################################### image to text ####################################### 
-        data_files = glob.glob(os.path.join(self.data_args.image_folder, "*.tar"))
-        ## text to image
-        train_dataset = load_dataset("webdataset", data_files=data_files, split="train", cache_dir='/fsx/sfr/data/jiuhai/', num_proc=128)
-        train_dataset = train_dataset.rename_column("jpg", "image")
-        train_dataset = train_dataset.add_column('type', len(train_dataset) * ['I2T'])
-        train_dataset = train_dataset.add_column('image_path', len(train_dataset) * [None])
-        train_dataset = train_dataset.remove_columns([col for col in train_dataset.column_names if not col in (
-            ["image", "txt", "type", "image_path"])])
-        print(f"finish loading image {len(train_dataset)}")
-        list_data_dict.append(train_dataset)
+        # #data_files = glob.glob(os.path.join(self.data_args.image_folder, "*.tar"))
+        # data_files = [glob.glob(os.path.join(self.data_args.image_folder, "*.tar"))[0]]
+        # ## text to image
+        # train_dataset = load_dataset("webdataset", data_files=data_files, split="train", num_proc=128)
+        # train_dataset = train_dataset.rename_column("jpg", "image")
+        # train_dataset = train_dataset.add_column('type', len(train_dataset) * ['I2T'])
+        # train_dataset = train_dataset.add_column('image_path', len(train_dataset) * [None])
+        # train_dataset = train_dataset.remove_columns([col for col in train_dataset.column_names if not col in (
+        #     ["image", "txt", "type", "image_path"])])
+        # print(f"finish loading image {len(train_dataset)}")
+        # list_data_dict.append(train_dataset)
 
 
 
@@ -856,7 +858,7 @@ def train(attn_implementation=None):
             model.get_input_embeddings().register_forward_hook(make_inputs_require_grad)
     if "Qwen" in model_args.model_name_or_path or "qwen" in model_args.model_name_or_path:
         tokenizer = AutoProcessor.from_pretrained(model_args.model_name_or_path)
-        tokenizer.model_max_length = training_args.model_max_length
+        tokenizer.model_max_length = training_args.model_max_length #131072 -> 512
     else:
         tokenizer = transformers.AutoTokenizer.from_pretrained(
             model_args.model_name_or_path,
@@ -883,7 +885,7 @@ def train(attn_implementation=None):
             model=model,
         )
     if model_args.version in conversation_lib.conv_templates:
-        conversation_lib.default_conversation = conversation_lib.conv_templates[model_args.version]
+        conversation_lib.default_conversation = conversation_lib.conv_templates[model_args.version]#qwen
     else:
         conversation_lib.default_conversation = conversation_lib.conv_templates["qwen"]
     rank0_print(f"Using conversation format: {conversation_lib.default_conversation.version}")
@@ -921,23 +923,23 @@ def train(attn_implementation=None):
 
     data_args.image_processor = SiglipImageProcessor.from_pretrained(model_args.vision_tower)
     data_args.is_multimodal = True
-    data_args.n_query = model_args.n_query
-    data_args.n_und_query = model_args.n_und_query
+    data_args.n_query = model_args.n_query  #64
+    data_args.n_und_query = model_args.n_und_query  #0
 
-    model.config.image_aspect_ratio = data_args.image_aspect_ratio
-    model.config.tokenizer_padding_side = tokenizer.padding_side
-    model.config.tokenizer_model_max_length = tokenizer.model_max_length
+    model.config.image_aspect_ratio = data_args.image_aspect_ratio  #square
+    model.config.tokenizer_padding_side = tokenizer.padding_side  #right
+    model.config.tokenizer_model_max_length = tokenizer.model_max_length #512
 
-    model.config.tune_mm_mlp_adapter = training_args.tune_mm_mlp_adapter = model_args.tune_mm_mlp_adapter
+    model.config.tune_mm_mlp_adapter = training_args.tune_mm_mlp_adapter = model_args.tune_mm_mlp_adapter#false
 
-    model.config.freeze_mm_mlp_adapter = training_args.freeze_mm_mlp_adapter
+    model.config.freeze_mm_mlp_adapter = training_args.freeze_mm_mlp_adapter#false
 
     # Calculate total parameters and trainable parameters
     total_params = sum(p.numel() for p in model.get_model().parameters())
     trainable_params = sum(p.numel() for p in model.get_model().parameters() if p.requires_grad)
 
-    print(f"Total parameters: {total_params}")
-    print(f"Trainable parameters: {trainable_params}")
+    print(f"Total parameters: {total_params}")#6,737,479,264
+    print(f"Trainable parameters: {trainable_params}") #1,958,498,208
 
 
     model.config.mm_use_im_start_end = data_args.mm_use_im_start_end = model_args.mm_use_im_start_end
@@ -945,7 +947,7 @@ def train(attn_implementation=None):
     training_args.use_im_start_end = model_args.mm_use_im_start_end
     model.config.mm_use_im_patch_token = model_args.mm_use_im_patch_token
     model.initialize_vision_tokenizer(model_args, tokenizer=tokenizer)
-    model.config.pad_token_id = tokenizer.pad_token_id
+    model.config.pad_token_id = tokenizer.pad_token_id #151643
 
     data_module = make_supervised_data_module(tokenizer=tokenizer, data_args=data_args)
 
@@ -961,7 +963,7 @@ def train(attn_implementation=None):
         stat = []
         for i, (n, p) in enumerate(trainer.model.named_parameters()):
             stat.append([i, n, p.shape, p.requires_grad])
-        print(tabulate(stat, headers=["idx", "name", "shape", "trainable"]))
+        #print(tabulate(stat, headers=["idx", "name", "shape", "trainable"]))
     if list(pathlib.Path(training_args.output_dir).glob("checkpoint-*")):
         trainer.train(resume_from_checkpoint=True)
     else:

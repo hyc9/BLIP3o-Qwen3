@@ -1,0 +1,122 @@
+  0%|                                                          | 0/27960 [00:00<?, ?it/s]/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/torch/utils/checkpoint.py:91: UserWarning: None of the inputs have requires_grad=True. Gradients will be None
+  warnings.warn(
+Traceback (most recent call last):
+  File "/root/.vscode-server/extensions/ms-python.python-2024.5.11021008/python_files/lib/python/debugpy/_vendored/pydevd/pydevd.py", line 3489, in <module>
+    main()
+  File "/root/.vscode-server/extensions/ms-python.python-2024.5.11021008/python_files/lib/python/debugpy/_vendored/pydevd/pydevd.py", line 3482, in main
+    globals = debugger.run(setup['file'], None, None, is_module)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.vscode-server/extensions/ms-python.python-2024.5.11021008/python_files/lib/python/debugpy/_vendored/pydevd/pydevd.py", line 2510, in run
+    return self._exec(is_module, entry_point_fn, module_name, file, globals, locals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.vscode-server/extensions/ms-python.python-2024.5.11021008/python_files/lib/python/debugpy/_vendored/pydevd/pydevd.py", line 2517, in _exec
+    globals = pydevd_runpy.run_path(file, globals, '__main__')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.vscode-server/extensions/ms-python.python-2024.5.11021008/python_files/lib/python/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_runpy.py", line 321, in run_path
+    return _run_module_code(code, init_globals, run_name,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/.vscode-server/extensions/ms-python.python-2024.5.11021008/python_files/lib/python/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_runpy.py", line 135, in _run_module_code
+    _run_code(code, mod_globals, init_globals,
+  File "/root/.vscode-server/extensions/ms-python.python-2024.5.11021008/python_files/lib/python/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_runpy.py", line 124, in _run_code
+    exec(code, run_globals)
+  File "/root/MLLM/qwen3/BLIP3o-Qwen3/blip3o/train/train_mem.py", line 4, in <module>
+    train(attn_implementation="flash_attention_2")
+  File "/root/MLLM/qwen3/BLIP3o-Qwen3/blip3o/train/train.py", line 970, in train
+    trainer.train()
+  File "/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/transformers/trainer.py", line 2245, in train
+    return inner_training_loop(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/transformers/trainer.py", line 2560, in _inner_training_loop
+    tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/transformers/trainer.py", line 3736, in training_step
+    loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/transformers/trainer.py", line 3801, in compute_loss
+    outputs = model(**inputs)
+              ^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1532, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1541, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/deepspeed/utils/nvtx.py", line 20, in wrapped_fn
+    ret_val = func(*args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/deepspeed/runtime/engine.py", line 2063, in forward
+    loss = self.module(*inputs, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1532, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1582, in _call_impl
+    result = forward_call(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/MLLM/qwen3/BLIP3o-Qwen3/blip3o/model/language_model/blip3o_qwen.py", line 90, in forward
+    ) = self.prepare_inputs_labels_for_multimodal(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/MLLM/qwen3/BLIP3o-Qwen3/blip3o/model/blip3o_arch.py", line 315, in prepare_inputs_labels_for_multimodal
+    text_embeds[gen_img_idx] = latent_queries
+    ~~~~~~~~~~~^^^^^^^^^^^^^
+RuntimeError: shape mismatch: value tensor of shape [192, 1024] cannot be broadcast to indexing result of shape [512, 1024]
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/root/.vscode-server/extensions/ms-python.python-2024.5.11021008/python_files/lib/python/debugpy/_vendored/pydevd/pydevd.py", line 3489, in <module>
+[rank0]:     main()
+[rank0]:   File "/root/.vscode-server/extensions/ms-python.python-2024.5.11021008/python_files/lib/python/debugpy/_vendored/pydevd/pydevd.py", line 3482, in main
+[rank0]:     globals = debugger.run(setup['file'], None, None, is_module)
+[rank0]:               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/root/.vscode-server/extensions/ms-python.python-2024.5.11021008/python_files/lib/python/debugpy/_vendored/pydevd/pydevd.py", line 2510, in run
+[rank0]:     return self._exec(is_module, entry_point_fn, module_name, file, globals, locals)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/root/.vscode-server/extensions/ms-python.python-2024.5.11021008/python_files/lib/python/debugpy/_vendored/pydevd/pydevd.py", line 2517, in _exec
+[rank0]:     globals = pydevd_runpy.run_path(file, globals, '__main__')
+[rank0]:               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/root/.vscode-server/extensions/ms-python.python-2024.5.11021008/python_files/lib/python/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_runpy.py", line 321, in run_path
+[rank0]:     return _run_module_code(code, init_globals, run_name,
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/root/.vscode-server/extensions/ms-python.python-2024.5.11021008/python_files/lib/python/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_runpy.py", line 135, in _run_module_code
+[rank0]:     _run_code(code, mod_globals, init_globals,
+[rank0]:   File "/root/.vscode-server/extensions/ms-python.python-2024.5.11021008/python_files/lib/python/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_runpy.py", line 124, in _run_code
+[rank0]:     exec(code, run_globals)
+[rank0]:   File "/root/MLLM/qwen3/BLIP3o-Qwen3/blip3o/train/train_mem.py", line 4, in <module>
+[rank0]:     train(attn_implementation="flash_attention_2")
+[rank0]:   File "/root/MLLM/qwen3/BLIP3o-Qwen3/blip3o/train/train.py", line 970, in train
+[rank0]:     trainer.train()
+[rank0]:   File "/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/transformers/trainer.py", line 2245, in train
+[rank0]:     return inner_training_loop(
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/transformers/trainer.py", line 2560, in _inner_training_loop
+[rank0]:     tr_loss_step = self.training_step(model, inputs, num_items_in_batch)
+[rank0]:                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/transformers/trainer.py", line 3736, in training_step
+[rank0]:     loss = self.compute_loss(model, inputs, num_items_in_batch=num_items_in_batch)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/transformers/trainer.py", line 3801, in compute_loss
+[rank0]:     outputs = model(**inputs)
+[rank0]:               ^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1532, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1541, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/deepspeed/utils/nvtx.py", line 20, in wrapped_fn
+[rank0]:     ret_val = func(*args, **kwargs)
+[rank0]:               ^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/deepspeed/runtime/engine.py", line 2063, in forward
+[rank0]:     loss = self.module(*inputs, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1532, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/opt/anaconda3/envs/blip3o/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1582, in _call_impl
+[rank0]:     result = forward_call(*args, **kwargs)
+[rank0]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/root/MLLM/qwen3/BLIP3o-Qwen3/blip3o/model/language_model/blip3o_qwen.py", line 90, in forward
+[rank0]:     ) = self.prepare_inputs_labels_for_multimodal(
+[rank0]:         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/root/MLLM/qwen3/BLIP3o-Qwen3/blip3o/model/blip3o_arch.py", line 315, in prepare_inputs_labels_for_multimodal
+[rank0]:     text_embeds[gen_img_idx] = latent_queries
+[rank0]:     ~~~~~~~~~~~^^^^^^^^^^^^^
+[rank0]: RuntimeError: shape mismatch: value tensor of shape [192, 1024] cannot be broadcast to indexing result of shape [512, 1024]

@@ -45,7 +45,7 @@ class blip3oQwenForCausalLM(Qwen3ForCausalLM, blip3oMetaForCausalLM):
         config.model_type = "blip3o_qwen"
 
         self.model = blip3oQwenModel(config)
-        self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
+        self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=False)#1024 151936
         # Initialize weights and apply final processing
         self.post_init()
 

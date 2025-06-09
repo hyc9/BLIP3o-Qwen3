@@ -103,20 +103,20 @@ class blip3oMetaModel:
         self.config.use_mm_proj = True
         self.config.mm_projector_type = getattr(model_args, 'mm_projector_type', 'linear')
 
-        self.config.mm_hidden_size = vision_tower.config.hidden_size
+        self.config.mm_hidden_size = vision_tower.config.hidden_size #1152
 
 
-        if 'eva' in model_args.gen_vision_tower:
-            self.config.gen_hidden_size = gen_vision_tower.hidden_size
+        if 'eva' in model_args.gen_vision_tower: #eva-clip-E-plus
+            self.config.gen_hidden_size = gen_vision_tower.hidden_size #1792
         elif 'siglip2' in model_args.gen_vision_tower:
             self.config.gen_hidden_size = gen_vision_tower.config.hidden_size
 
 
-        self.config.mm_vision_select_layer = mm_vision_select_layer
-        self.config.mm_vision_select_feature = mm_vision_select_feature
-        self.config.mm_patch_merge_type = mm_patch_merge_type
-        self.config.n_query = model_args.n_query
-        self.config.gen_pooling = model_args.gen_pooling
+        self.config.mm_vision_select_layer = mm_vision_select_layer #-2
+        self.config.mm_vision_select_feature = mm_vision_select_feature #patch
+        self.config.mm_patch_merge_type = mm_patch_merge_type  #flat
+        self.config.n_query = model_args.n_query  #64
+        self.config.gen_pooling = model_args.gen_pooling   #early_pooled_2d_4
 
 
         if getattr(self, 'mm_projector', None) is None:
@@ -238,7 +238,7 @@ class blip3oMetaForCausalLM(ABC):
 
     def pool_img(self, image_features):
         num_img, n, c = image_features.shape
-        gen_pooling = self.get_gen_pooling()
+        gen_pooling = self.get_gen_pooling()  #early_pooled2d_4
         n_query = self.get_n_query()
         stride = int(gen_pooling.split('_')[-1])
         sqrt_n = int(n**0.5)
@@ -280,11 +280,11 @@ class blip3oMetaForCausalLM(ABC):
             return input_ids, position_ids, attention_mask, past_key_values, None, labels, None, None, None
         
 
-
+        #gen_images 3 3 448 448
         if not gen_images is None:
             prompt_image_embeds = gen_vision_tower(gen_images)  # prompt_image_embeds = gen_vision_tower(gen_images).last_hidden_state 
             ## pooling 
-            prompt_image_embeds = self.pool_img(prompt_image_embeds)
+            prompt_image_embeds = self.pool_img(prompt_image_embeds) #3 1024 1792 -> 3 1792 8 8 
             target_image_embeds = torch.clone(prompt_image_embeds).detach()
             latent_queries = self.get_model().latent_queries.repeat(gen_images.shape[0], 1, 1)
             H = latent_queries.shape[-1]
@@ -293,13 +293,13 @@ class blip3oMetaForCausalLM(ABC):
             target_image_embeds = None
     
 
-
+        #und_images 5 3 512 512
         if not und_images is None:
             
-            und_image_embeds = vision_tower(und_images).last_hidden_state
-            num_img, _, c = und_image_embeds.shape
+            und_image_embeds = vision_tower(und_images).last_hidden_state  
+            num_img, _, c = und_image_embeds.shape  #5 1024 1152
             und_image_embeds = und_image_embeds.contiguous().view(-1, c)
-            und_image_embeds = mm_projector(und_image_embeds)
+            und_image_embeds = mm_projector(und_image_embeds)  #5*1024, 1024
 
 
         image_idx = (input_ids == IMAGE_TOKEN_IDX)
@@ -308,7 +308,7 @@ class blip3oMetaForCausalLM(ABC):
         input_indicator = labels == -100
 
 
-        text_embeds = self.get_model().embed_tokens(input_ids)
+        text_embeds = self.get_model().embed_tokens(input_ids) #input_ids 8 235  text_embeds 8 235 1024
         text_embeds = text_embeds.clone() 
         gen_img_idx = torch.logical_and(output_indicator, image_idx)
         if not gen_images is None:

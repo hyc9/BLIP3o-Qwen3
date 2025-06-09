@@ -1,11 +1,16 @@
 #!/bin/bash
-
+export PATH=/usr/local/cuda-12.2/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64:$LD_LIBRARY_PATH
+export PATH=/opt/gcc-11.4/bin:$PATH
+export LD_LIBRARY_PATH=/opt/gcc-11.4/lib64:$LD_LIBRARY_PATH
+export CC=/opt/gcc-11.4/bin/gcc
+export CXX=/opt/gcc-11.4/bin/g++
 conda activate  blip3o
 
 
-export HF_HOME=/HF/Home/
-export OUTPUT_FOLDER=/Your/Model/Output/
-export IMG_FOLDER=/Your/Image/Folder
+export HF_HOME=/mnt/33t/cy/mllm_models/
+export OUTPUT_FOLDER=/mnt/33t/cy/ex1
+export IMG_FOLDER=/mnt/33t/cy/blip3o_dataset
 
 
 torchrun --nproc_per_node=8 \

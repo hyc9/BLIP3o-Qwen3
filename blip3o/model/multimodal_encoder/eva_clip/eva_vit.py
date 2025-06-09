@@ -444,7 +444,7 @@ class PatchEmbed(nn.Module):
         assert H == self.img_size[0] and W == self.img_size[1], \
             f"Input image size ({H}*{W}) doesn't match model ({self.img_size[0]}*{self.img_size[1]})."
         x = self.proj(x).flatten(2).transpose(1, 2)
-        return x
+        return x  #3 3 448 448 -> 3 1024 1792
 
 
 class RelativePositionBias(nn.Module):
@@ -751,7 +751,7 @@ class EVAEncoderWrapper(nn.Module):
 
     def forward(self, image, **kwargs):
         encode = self.model(image, return_all_features=True)[:, 1:, :]  # remove the CLS token
-        return encode
+        return encode  #3 1024  1792
 
     @property
     def dtype(self):

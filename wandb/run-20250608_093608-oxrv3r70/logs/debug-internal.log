@@ -1,0 +1,21 @@
+{"time":"2025-06-08T09:36:09.112319Z","level":"INFO","msg":"stream: starting","core version":"0.20.1","symlink path":"/root/MLLM/qwen3/BLIP3o-Qwen3/wandb/run-20250608_093608-oxrv3r70/logs/debug-core.log"}
+{"time":"2025-06-08T09:36:14.138152395Z","level":"ERROR","msg":"monitor: failed to initialize GPU asset: monitor: could not get GPU binary port: timeout reading portfile /tmp/.system-monitor-portfile3970191101"}
+{"time":"2025-06-08T09:36:14.161129876Z","level":"ERROR","msg":"Failed to load features, feature will default to disabled","error":"input:4:3: Cannot query field \"features\" on type \"ServerInfo\".\n"}
+{"time":"2025-06-08T09:36:14.16136546Z","level":"INFO","msg":"stream: created new stream","id":"oxrv3r70"}
+{"time":"2025-06-08T09:36:14.161418583Z","level":"INFO","msg":"stream: started","id":"oxrv3r70"}
+{"time":"2025-06-08T09:36:14.161429834Z","level":"INFO","msg":"sender: started","stream_id":"oxrv3r70"}
+{"time":"2025-06-08T09:36:14.161437302Z","level":"INFO","msg":"writer: Do: started","stream_id":"oxrv3r70"}
+{"time":"2025-06-08T09:36:14.161451428Z","level":"INFO","msg":"handler: started","stream_id":"oxrv3r70"}
+{"time":"2025-06-08T09:36:14.282180624Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-06-08T09:36:14.339260561Z","level":"ERROR","msg":"runfiles: CreateRunFiles returned error: input:3:2: Cannot query field \"createRunFiles\" on type \"Mutation\". Did you mean \"createInvite\", \"createRunQueue\", \"createEntity\", or \"createArtifactFiles\"?\n"}
+{"time":"2025-06-08T09:36:14.391435455Z","level":"ERROR","msg":"runfiles: CreateRunFiles returned error: input:3:2: Cannot query field \"createRunFiles\" on type \"Mutation\". Did you mean \"createInvite\", \"createRunQueue\", \"createEntity\", or \"createArtifactFiles\"?\n"}
+{"time":"2025-06-08T09:36:14.864098918Z","level":"ERROR","msg":"runfiles: CreateRunFiles returned error: input:3:2: Cannot query field \"createRunFiles\" on type \"Mutation\". Did you mean \"createInvite\", \"createRunQueue\", \"createEntity\", or \"createArtifactFiles\"?\n"}
+{"time":"2025-06-08T12:30:02.977695246Z","level":"INFO","msg":"stream: closing","id":"oxrv3r70"}
+{"time":"2025-06-08T12:30:02.977756109Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-06-08T12:30:02.977881153Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-06-08T12:30:03.034566219Z","level":"ERROR","msg":"runfiles: CreateRunFiles returned error: input:3:2: Cannot query field \"createRunFiles\" on type \"Mutation\". Did you mean \"createInvite\", \"createRunQueue\", \"createEntity\", or \"createArtifactFiles\"?\n"}
+{"time":"2025-06-08T12:30:03.035143276Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-06-08T12:30:03.103683201Z","level":"INFO","msg":"handler: closed","stream_id":"oxrv3r70"}
+{"time":"2025-06-08T12:30:03.103752271Z","level":"INFO","msg":"writer: Close: closed","stream_id":"oxrv3r70"}
+{"time":"2025-06-08T12:30:03.103768795Z","level":"INFO","msg":"sender: closed","stream_id":"oxrv3r70"}
+{"time":"2025-06-08T12:30:03.103885419Z","level":"INFO","msg":"stream: closed","id":"oxrv3r70"}

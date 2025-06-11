@@ -5,14 +5,14 @@
 #export LD_LIBRARY_PATH=/opt/gcc-11.4/lib64:$LD_LIBRARY_PATH
 #export CC=/opt/gcc-11.4/bin/gcc
 #export CXX=/opt/gcc-11.4/bin/g++
-conda activate  blip3o
-
+#conda activate  blip3o
+export HF_ENDPOINT="https://hf-mirror.com"
 
 export HF_HOME=/ssdwork/chengyu/mllm_models/
 export OUTPUT_FOLDER=/ssdwork/chengyu/ex1
 export IMG_FOLDER=/ssdwork/chengyu/blip3o_dataset
-export CUDA_VISIBLE_DEVICES=0
-torchrun --nproc_per_node=1  \
+export CUDA_VISIBLE_DEVICES=0,1
+torchrun --nproc_per_node=2  \
     blip3o/train/train_mem.py \
     --deepspeed ./deepspeed_scripts/zero1.json \
     --model_name_or_path Qwen/Qwen3-0.6B \

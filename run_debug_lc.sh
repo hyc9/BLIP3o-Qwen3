@@ -1,0 +1,59 @@
+#!/bin/bash
+#export PATH=/usr/local/cuda-12.2/bin:$PATH
+#export LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64:$LD_LIBRARY_PATH
+#export PATH=/opt/gcc-11.4/bin:$PATH
+#export LD_LIBRARY_PATH=/opt/gcc-11.4/lib64:$LD_LIBRARY_PATH
+#export CC=/opt/gcc-11.4/bin/gcc
+#export CXX=/opt/gcc-11.4/bin/g++
+conda activate  blip3o
+
+
+export HF_HOME=/ssdwork/chengyu/mllm_models/
+export OUTPUT_FOLDER=/ssdwork/chengyu/ex1
+export IMG_FOLDER=/ssdwork/chengyu/blip3o_dataset
+export CUDA_VISIBLE_DEVICES=0
+torchrun --nproc_per_node=1  \
+    blip3o/train/train_mem.py \
+    --deepspeed ./deepspeed_scripts/zero1.json \
+    --model_name_or_path Qwen/Qwen3-0.6B \
+    --version qwen \
+    --data_type "mix" \
+    --image_folder ${IMG_FOLDER} \
+    --vision_tower google/siglip2-so400m-patch16-512 \
+    --freeze_backbone False \
+    --gen_vision_tower eva-clip-E-14-plus \
+    --gen_projector_type mlp2x_gelu \
+    --mm_projector_type mlp2x_gelu \
+    --mm_vision_select_layer -2 \
+    --mm_use_im_start_end False \
+    --mm_use_im_patch_token False \
+    --bf16 True \
+    --output_dir ${OUTPUT_FOLDER} \
+    --num_train_epochs 10 \
+    --per_device_train_batch_size 4 \
+    --per_device_eval_batch_size 4 \
+    --gradient_accumulation_steps 1 \
+    --eval_strategy "no" \
+    --save_strategy "steps" \
+    --save_steps 1000 \
+    --save_total_limit 1 \
+    --learning_rate 1e-4 \
+    --weight_decay 0. \
+    --warmup_ratio 0.003 \
+    --lr_scheduler_type "cosine_with_min_lr" \
+    --lr_scheduler_kwargs '{"min_lr":1e-5}' \
+    --model_max_length 512 \
+    --logging_steps 1 \
+    --tf32 True \
+    --gradient_checkpointing True \
+    --dataloader_num_workers 4 \
+    --lazy_preprocess True \
+    --gen_pooling early_pool2d_4 \
+    --n_query 64 \
+    --n_und_query 0 \
+    --report_to none \
+    --run_name blip3o_qwen3_siglip2
+
+
+
+
